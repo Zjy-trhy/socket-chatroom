@@ -8,16 +8,21 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ChatServer {
 
     private final int DEFAULT_PORT = 8888;
     private final String QUIT = "quit";
+
+    private ExecutorService executorService;
     private ServerSocket serverSocket;
     private Map<Integer, Writer> connectedClients;
 
     public ChatServer() {
         connectedClients = new HashMap<>();
+        executorService = Executors.newFixedThreadPool(10);
     }
 
     public synchronized void addClient(Socket socket) throws IOException {
@@ -71,8 +76,10 @@ public class ChatServer {
             while (true) {
                 //等待客户端连接
                 Socket accept = serverSocket.accept();
+                //使用线程池去执行任务,execute和submit的取别？
+                executorService.execute(new ChatHandler(this, accept));
                 //创建一个ChatHandler线程
-                new Thread(new ChatHandler(this, accept)).start();
+//                new Thread(new ChatHandler(this, accept)).start();
             }
         } catch (IOException e) {
             e.printStackTrace();
