@@ -11,6 +11,7 @@
     <modules>
         <module>基础程序</module>
         <module>BIO</module>
+        <module>NIO</module>
     </modules>
 
     <dependencies>
