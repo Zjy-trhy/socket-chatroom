@@ -239,3 +239,20 @@ public class Client {
 ![image-20201227151114447](NIOAIO——笔记.assets/image-20201227151114447.png)
 
 ​	
+
+## 第8章 AIO
+
+![image-20201229140749554](NIOAIO——笔记.assets/image-20201229140749554.png)
+
+![image-20201229141038133](NIOAIO——笔记.assets/image-20201229141038133.png)
+
+![image-20201229141553878](NIOAIO——笔记.assets/image-20201229141553878.png)
+
+![image-20201229142341156](NIOAIO——笔记.assets/image-20201229142341156.png)
+
+![image-20201229142524367](NIOAIO——笔记.assets/image-20201229142524367.png)
+
+![image-20201229143030191](NIOAIO——笔记.assets/image-20201229143030191.png)
+
+![image-20201229143445665](NIOAIO——笔记.assets/image-20201229143445665.png)
+

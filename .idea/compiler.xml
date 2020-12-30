@@ -10,6 +10,7 @@
         <module name="基础程序" />
         <module name="NIO" />
         <module name="jichu" />
+        <module name="AIO" />
       </profile>
     </annotationProcessing>
   </component>

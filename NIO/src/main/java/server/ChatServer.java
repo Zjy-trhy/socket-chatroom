@@ -33,7 +33,7 @@ public class ChatServer {
         this.port = port;
     }
 
-    public void close(Closeable closeable) {
+    private void close(Closeable closeable) {
         if (closeable != null) {
             try {
                 closeable.close();
@@ -55,7 +55,7 @@ public class ChatServer {
 
             while (true) {
                 selector.select();//如果没有事件发生，阻塞
-                Set<SelectionKey> selectionKeys = selector.selectedKeys();
+                Set<SelectionKey> selectionKeys = selector.selectedKeys();//获取监听到的事件集合
                 for (SelectionKey selectionKey : selectionKeys) {
                     //处理被触发的事件
                     handles(selectionKey);
@@ -64,6 +64,9 @@ public class ChatServer {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (ClosedSelectorException e) {
+            //用户正常退出
+            System.err.println("已下线~~~");
         } finally {
             close(selector);
         }
@@ -100,6 +103,23 @@ public class ChatServer {
         }
     }
 
+    private void forwardMsg(SocketChannel client, String fwdMsg) throws IOException {
+        for (SelectionKey key : selector.keys()) {
+            SelectableChannel connectedChannel = key.channel();
+            if (connectedChannel instanceof ServerSocketChannel) {
+                continue;
+            }
+            if (key.isValid() && !client.equals(connectedChannel)) {
+                wBuffer.clear();
+                wBuffer.put(charset.encode(getClientName(client) + "：" + fwdMsg));
+                wBuffer.flip();
+                while (wBuffer.hasRemaining()) {
+                    ((SocketChannel) connectedChannel).write(wBuffer);
+                }
+            }
+        }
+    }
+
     private String receive(SocketChannel client) throws IOException {
         rBuffer.clear();
         while (client.read(rBuffer) > 0);
@@ -113,5 +133,10 @@ public class ChatServer {
 
     private String getClientName(SocketChannel client) {
         return "客户端[" + client.socket().getPort() + "]";
+    }
+
+    public static void main(String[] args) {
+        ChatServer chatServer = new ChatServer(7777);
+        chatServer.start();
     }
 }
