@@ -1,5 +1,3 @@
-package server;
-
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -29,6 +27,7 @@ public class ChatServer {
 
     public void start() {
         //绑定监听端口
+        //AsynchronousChannelGroup，有类似于线程池的功能，开启一个新线程
         try {
             serverChannel = AsynchronousServerSocketChannel.open();
             serverChannel.bind(new InetSocketAddress(LOCAL_HOST, DEFAULT_PORT));
@@ -52,13 +51,12 @@ public class ChatServer {
             }
             AsynchronousSocketChannel clientChannel = result;
             if (clientChannel != null && clientChannel.isOpen()) {
-                ClientHander handler = new ClientHandler(clientChannel);
+                ClientHandler handler = new ClientHandler(clientChannel);
                 ByteBuffer buffer = ByteBuffer.allocate(1024);
                 Map<String, Object> info = new HashMap<>();
                 info.put("type", "read");
                 info.put("buffer", buffer);
                 clientChannel.read(buffer, info, handler);
-
             }
         }
 
@@ -66,5 +64,42 @@ public class ChatServer {
         public void failed(Throwable exc, Object attachment) {
 
         }
+    }
+
+    private class ClientHandler implements CompletionHandler<Integer, Object> {
+
+        private AsynchronousSocketChannel clientChannel;
+
+        public ClientHandler(AsynchronousSocketChannel clientChannel) {
+            this.clientChannel = clientChannel;
+        }
+
+        @Override
+        public void completed(Integer result, Object attachment) {
+            Map<String, Object> info = (Map<String, Object>) attachment;
+            String type = (String) info.get("type");
+            if ("read".equals(type)) {
+                ByteBuffer buffer = (ByteBuffer) info.get("buffer");
+                buffer.flip();
+                info.put("type", "write");
+                clientChannel.write(buffer, info, this);
+                buffer.clear();
+            } else if ("write".equals(type)) {
+                ByteBuffer buffer = ByteBuffer.allocate(1024);
+                info.put("type", "read");
+                info.put("buffer", buffer);
+                clientChannel.read(buffer, info, this);
+            }
+        }
+
+        @Override
+        public void failed(Throwable exc, Object attachment) {
+
+        }
+    }
+
+    public static void main(String[] args) {
+        ChatServer chatServer = new ChatServer();
+        chatServer.start();
     }
 }
