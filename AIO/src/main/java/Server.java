@@ -8,7 +8,7 @@ import java.nio.channels.CompletionHandler;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ChatServer {
+public class Server {
 
     private static final int DEFAULT_PORT = 8888;
     private static final String LOCAL_HOST = "localhost";
@@ -99,7 +99,7 @@ public class ChatServer {
     }
 
     public static void main(String[] args) {
-        ChatServer chatServer = new ChatServer();
+        Server chatServer = new Server();
         chatServer.start();
     }
 }
