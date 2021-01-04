@@ -72,8 +72,7 @@ public class ChatClient {
                 if (result <= 0) {
                     //发生异常，没有读取到数据
                     close(clientChannel);
-                    System.out.println("与服务器连接异常");
-                    System.exit(1);
+                    break;
                 } else {
                     //正常读取到信息
                     buffer.flip();

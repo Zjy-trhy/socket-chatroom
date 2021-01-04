@@ -72,7 +72,7 @@ public class ChatServer {
             //不转发到发送消息的那个客户端
             if (handler.clientChannel.equals(clientChannel)) continue;
             //将要发送的消息写入到缓冲区
-            ByteBuffer buffer = charset.encode(getClientName(handler.clientChannel) + "：" + fwdMsg);
+            ByteBuffer buffer = charset.encode(getClientName(clientChannel) + "：" + fwdMsg);
             //将相应的信息写入到用户通道中，用户再通过获取通道中的信息读取到对应的转发内容
             handler.clientChannel.write(buffer, null, handler);
         }
