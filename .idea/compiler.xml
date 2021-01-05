@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="BIO" />
         <module name="基础程序" />
+        <module name="webserver" />
         <module name="NIO" />
         <module name="jichu" />
         <module name="AIO" />

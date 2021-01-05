@@ -13,6 +13,7 @@
         <module>BIO</module>
         <module>NIO</module>
         <module>AIO</module>
+        <module>webserver</module>
     </modules>
 
     <dependencies>
