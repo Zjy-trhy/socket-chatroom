@@ -1,6 +1,9 @@
+package connector;
+
 import connector.Request;
 import org.junit.Assert;
 import org.junit.Test;
+import utils.TestUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -11,9 +14,7 @@ public class RequestTest {
 
     @Test
     public void givenValidRequest_thenExtrackUri() {
-        InputStream input = new ByteArrayInputStream(validRequest.getBytes());
-        Request request = new Request(input);
-        request.parse();
-        Assert.assertEquals("/webroot/index.html", request.getRequestUri());
+        Request request = TestUtils.createRequest(validRequest);
+        Assert.assertEquals("/index.html", request.getRequestUri());
     }
 }
