@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class TimeServer implements Servlet {
+public class TimeServlet implements Servlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
 
@@ -24,7 +24,6 @@ public class TimeServer implements Servlet {
         out.println(ConnectorUtils.renderStatus(HttpStatus.SC_OK));
         out.println("What time is it now? ");
         out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-        
     }
 
     @Override
